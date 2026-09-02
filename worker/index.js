@@ -75,14 +75,23 @@ const page = `<!doctype html>
       .intro-meta strong { display: block; color: var(--yellow); font-size: 11px; }
       .intro-skip { position: absolute; top: 30px; right: 34px; z-index: 7; border: 0; border-bottom: 1px solid rgba(240, 211, 38, 0.35); padding: 7px 0; background: transparent; color: var(--muted); cursor: pointer; font: 850 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; transition: color 180ms ease, border-color 180ms ease; }
       .intro-skip:hover { color: var(--yellow); border-color: var(--yellow); }
-      .intro-side { position: absolute; inset: 0 0 0 auto; z-index: 2; width: clamp(190px, 16.666vw, 320px); border-left: 1px solid rgba(240, 211, 38, 0.2); background: linear-gradient(90deg, transparent, rgba(240, 211, 38, 0.045)); }
-      .intro-side::before { content: ""; position: absolute; inset: 0; opacity: 0.52; background: repeating-linear-gradient(-45deg, transparent 0 26px, rgba(240, 211, 38, 0.055) 27px 28px); }
+      .intro-side { position: absolute; inset: 0 0 0 auto; z-index: 2; width: clamp(190px, 16.666vw, 320px); border-left: 1px solid rgba(240, 211, 38, 0.2); background: linear-gradient(90deg, transparent, rgba(240, 211, 38, 0.055)); }
+      .intro-side::before { content: ""; position: absolute; inset: 0; opacity: 0.68; background: repeating-linear-gradient(-45deg, transparent 0 26px, rgba(240, 211, 38, 0.055) 27px 28px), linear-gradient(180deg, transparent 0 18%, rgba(240, 211, 38, 0.07) 18% 18.2%, transparent 18.2% 81%, rgba(240, 211, 38, 0.07) 81% 81.2%, transparent 81.2%); }
       .intro-side::after { content: "01 / FJMT"; position: absolute; right: 18px; bottom: 28px; color: rgba(240, 211, 38, 0.46); font: 850 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.17em; writing-mode: vertical-rl; }
-      .intro-bird { position: absolute; top: 50%; right: clamp(7px, 1.5vw, 28px); width: clamp(155px, 15vw, 270px); transform: translate3d(7%, -50%, 0); animation: birdHover 4.6s ease-in-out infinite; will-change: transform, filter; }
+      .bird-frame { position: absolute; top: 50%; right: -28%; z-index: 1; width: 158%; aspect-ratio: 1; border: 1px solid rgba(240, 211, 38, 0.25); border-radius: 50%; transform: translateY(-50%); box-shadow: 0 0 0 24px rgba(240, 211, 38, 0.025), 0 0 0 58px rgba(240, 211, 38, 0.018); }
+      .bird-frame::before { content: ""; position: absolute; inset: 18%; border: 1px dashed rgba(240, 211, 38, 0.25); border-radius: 50%; }
+      .bird-frame::after { content: ""; position: absolute; inset: -12%; opacity: 0.55; background: linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(240, 211, 38, 0.24) 50%, transparent calc(50% + 0.5px)), linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(240, 211, 38, 0.24) 50%, transparent calc(50% + 0.5px)); }
+      .bird-axis { position: absolute; inset: 50% -16% auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(240, 211, 38, 0.42) 24%, rgba(240, 211, 38, 0.42) 76%, transparent); }
+      .bird-axis::before, .bird-axis::after { content: ""; position: absolute; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(240, 211, 38, 0.07); }
+      .bird-axis::before { left: 21%; }
+      .bird-axis::after { right: 21%; }
+      .bird-pulse { position: absolute; inset: 31%; border: 1px solid rgba(240, 211, 38, 0.28); border-top-color: var(--yellow); border-radius: 50%; animation: orbitSpin 9s linear infinite; }
+      .intro-bird { position: absolute; top: 50%; right: clamp(7px, 1.5vw, 28px); z-index: 3; width: clamp(155px, 15vw, 270px); transform: translate3d(7%, -50%, 0); animation: birdHover 4.6s ease-in-out infinite; will-change: transform, filter; }
       .intro-bird::after { content: ""; position: absolute; top: 54%; right: 72%; z-index: -1; width: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--yellow)); box-shadow: 0 -12px rgba(240, 211, 38, 0.24), 0 12px rgba(240, 211, 38, 0.13); opacity: 0; }
       .intro-bird img { width: 100%; filter: drop-shadow(0 0 24px rgba(240, 211, 38, 0.18)); }
       .intro.exiting .intro-bird { animation: birdFlyLeft 1.28s cubic-bezier(0.55, 0, 0.16, 1) forwards; }
       .intro.exiting .intro-bird::after { animation: flightTrail 850ms 80ms ease-out forwards; }
+      .intro.exiting .bird-frame { animation: frameCollapse 720ms ease-in forwards; }
       .intro.exiting { animation: introCurtain 1.18s 340ms cubic-bezier(0.78, 0, 0.18, 1) forwards; pointer-events: none; }
       .intro-center { position: relative; z-index: 4; width: min(calc(100% - 52px), 570px); margin-right: clamp(92px, 12vw, 205px); text-align: center; }
       .intro-mark { width: 76px; height: 76px; margin: 0 auto 22px; opacity: 0; transform: translateY(8px) scale(0.9); transition: opacity 500ms ease, transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -109,6 +118,8 @@ const page = `<!doctype html>
       @keyframes birdHover { 0%, 100% { transform: translate3d(7%, -50%, 0) rotate(-1.5deg); } 50% { transform: translate3d(-2%, calc(-50% - 13px), 0) rotate(1.7deg); } }
       @keyframes birdFlyLeft { 0% { transform: translate3d(7%, -50%, 0) rotate(-1deg) scale(1); } 17% { transform: translate3d(22%, calc(-50% - 17px), 0) rotate(5deg) scale(0.97); } 100% { transform: translate3d(-158vw, calc(-50% - 46px), 0) rotate(-9deg) scale(0.76); } }
       @keyframes flightTrail { 0% { width: 0; opacity: 0; } 25% { opacity: 0.78; } 100% { width: 58vw; opacity: 0; } }
+      @keyframes orbitSpin { to { transform: rotate(360deg); } }
+      @keyframes frameCollapse { to { opacity: 0; transform: translateY(-50%) scale(0.72); } }
       @keyframes introCurtain { to { transform: translate3d(-100%, 0, 0); } }
       @keyframes knobNudge { 0%, 68%, 100% { transform: translate3d(var(--drag-x), 0, 0); } 82% { transform: translate3d(calc(var(--drag-x) + 10px), 0, 0); } }
 
@@ -162,11 +173,20 @@ const page = `<!doctype html>
       .portrait-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: saturate(0.88) contrast(1.03); }
       .portrait-label { position: absolute; right: -1px; bottom: -1px; background: var(--yellow); color: var(--ink); padding: 9px 12px; font: 900 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
 
-      .section { padding: 105px 0; border-bottom: 1px solid var(--line); }
-      .section-head { display: grid; grid-template-columns: minmax(190px, 0.52fr) minmax(0, 1.48fr); gap: 50px; margin-bottom: 48px; }
-      .section-title { margin: 11px 0 0; font-size: clamp(38px, 5vw, 62px); line-height: 0.96; letter-spacing: -0.052em; text-transform: uppercase; }
-      .section-lead { max-width: 740px; margin: 0; color: var(--muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.52; }
+      .section { position: relative; overflow: hidden; padding: 105px 0; border-bottom: 1px solid var(--line); }
+      .section > .shell { position: relative; z-index: 2; }
+      .section-head { position: relative; display: grid; grid-template-columns: minmax(360px, 0.88fr) minmax(0, 1.12fr); align-items: end; gap: clamp(42px, 6vw, 86px); margin-bottom: 56px; padding-top: 21px; border-top: 1px solid var(--line); }
+      .section-head::before { content: ""; position: absolute; top: -1px; left: 0; width: 76px; height: 2px; background: var(--yellow); box-shadow: 0 0 18px rgba(240, 211, 38, 0.25); }
+      .section-title { max-width: 560px; margin: 11px 0 0; font-size: clamp(38px, 5vw, 62px); line-height: 0.94; letter-spacing: -0.052em; text-wrap: balance; text-transform: uppercase; }
+      .section-lead { max-width: 680px; margin: 0; padding-bottom: 4px; color: var(--muted); font-size: clamp(17px, 1.75vw, 21px); line-height: 1.52; }
       .section-lead strong { color: var(--paper); }
+
+      .systems-section, .toolkit-section { isolation: isolate; }
+      .systems-section::before, .toolkit-section::before { content: ""; position: absolute; z-index: 0; pointer-events: none; }
+      .systems-section::before { inset: 70px -110px auto auto; width: min(54vw, 720px); height: 520px; opacity: 0.32; background: radial-gradient(circle at center, rgba(240, 211, 38, 0.2) 0 1.5px, transparent 2px), linear-gradient(90deg, rgba(240, 211, 38, 0.1) 1px, transparent 1px), linear-gradient(rgba(240, 211, 38, 0.1) 1px, transparent 1px); background-size: 26px 26px, 52px 52px, 52px 52px; mask-image: radial-gradient(circle at 55% 42%, #000, transparent 69%); transform: rotate(-8deg); }
+      .systems-section::after { content: "02"; position: absolute; z-index: 0; top: 36px; right: clamp(-26px, 1vw, 16px); color: rgba(240, 211, 38, 0.028); font-size: clamp(190px, 22vw, 360px); font-weight: 950; line-height: 1; letter-spacing: -0.12em; }
+      .toolkit-section::before { inset: auto auto 20px -160px; width: min(58vw, 760px); height: 590px; opacity: 0.34; border: 1px solid rgba(240, 211, 38, 0.12); border-radius: 50%; background: repeating-radial-gradient(circle at center, transparent 0 45px, rgba(240, 211, 38, 0.095) 46px 47px); }
+      .toolkit-section::after { content: "03 / TOOLSET"; position: absolute; z-index: 0; right: 24px; bottom: 32px; color: rgba(240, 211, 38, 0.1); font: 850 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.22em; writing-mode: vertical-rl; }
 
       .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
       .about-copy, .principle { padding: clamp(26px, 4vw, 42px); border: 1px solid var(--line); background: var(--surface); }
@@ -176,16 +196,21 @@ const page = `<!doctype html>
       .principle blockquote { margin: 0; font-size: clamp(25px, 3vw, 37px); font-weight: 800; line-height: 1.13; letter-spacing: -0.035em; }
       .principle cite { color: var(--muted); font: 750 9px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
 
-      .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-      .project { --glow-x: 50%; --glow-y: 50%; position: relative; overflow: hidden; min-height: 390px; display: flex; flex-direction: column; padding: clamp(26px, 4vw, 38px); border: 1px solid var(--line); background: var(--surface); transition: transform 180ms ease, border-color 180ms ease; }
+      .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .project { --glow-x: 50%; --glow-y: 50%; position: relative; overflow: hidden; min-height: 410px; display: flex; flex-direction: column; padding: clamp(28px, 3.4vw, 38px); border: 1px solid var(--line); background: linear-gradient(145deg, rgba(24, 25, 19, 0.98), rgba(14, 15, 12, 0.98)); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
       .project::before { content: ""; position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(300px circle at var(--glow-x) var(--glow-y), rgba(240, 211, 38, 0.09), transparent 68%); transition: opacity 220ms ease; }
-      .project:hover { transform: translateY(-4px); border-color: rgba(240, 211, 38, 0.48); }
+      .project::after { content: ""; position: absolute; top: 62px; right: -112px; z-index: 0; width: 278px; height: 278px; border: 1px solid rgba(240, 211, 38, 0.2); border-radius: 50%; box-shadow: 0 0 0 27px rgba(240, 211, 38, 0.025), 0 0 0 58px rgba(240, 211, 38, 0.018); opacity: 0.75; background: linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(240, 211, 38, 0.2) 50%, transparent calc(50% + 0.5px)), linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(240, 211, 38, 0.2) 50%, transparent calc(50% + 0.5px)); transition: transform 350ms ease, opacity 250ms ease; }
+      .project:nth-child(even)::after { top: auto; right: -92px; bottom: 58px; transform: rotate(22deg); }
+      .project:hover { transform: translateY(-4px); border-color: rgba(240, 211, 38, 0.48); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2); }
       .project:hover::before { opacity: 1; }
+      .project:hover::after { opacity: 1; transform: translate3d(-9px, -4px, 0) scale(1.03); }
+      .project:nth-child(even):hover::after { transform: translate3d(-9px, 4px, 0) rotate(22deg) scale(1.03); }
       .project > * { position: relative; z-index: 1; }
-      .project-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .project-top { display: grid; grid-template-columns: auto minmax(40px, 1fr) auto; align-items: center; gap: 14px; }
+      .project-top::before { content: ""; grid-column: 2; width: 100%; height: 1px; background: linear-gradient(90deg, rgba(240, 211, 38, 0.38), transparent); }
       .project-year { color: var(--muted); font: 750 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .project h3 { max-width: 520px; margin: 58px 0 16px; font-size: clamp(25px, 3vw, 34px); line-height: 1.07; letter-spacing: -0.038em; }
-      .project p { margin: 0; color: var(--muted); font-size: 14px; }
+      .project h3 { max-width: 500px; margin: 58px 0 16px; font-size: clamp(25px, 2.65vw, 34px); line-height: 1.08; letter-spacing: -0.038em; text-wrap: balance; }
+      .project p { max-width: 550px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
       .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 28px; }
       .tag { border: 1px solid var(--yellow-line); padding: 7px 9px; color: var(--yellow); font: 750 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.06em; text-transform: uppercase; }
       .other-projects { margin-top: 18px; border: 1px solid var(--line); }
@@ -195,14 +220,19 @@ const page = `<!doctype html>
       .other-project strong { font-size: 15px; }
       .other-project small { color: var(--muted); font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
 
-      .capabilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); }
-      .capability { min-height: 250px; padding: 32px; background: var(--surface); }
-      .capability:nth-child(even) { border-left: 1px solid var(--line); }
-      .capability:nth-child(n + 3) { border-top: 1px solid var(--line); }
-      .capability-number { color: var(--yellow); font: 850 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .capability h3 { margin: 34px 0 18px; font-size: 20px; text-transform: uppercase; }
+      .capabilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .capability { position: relative; overflow: hidden; min-height: 280px; padding: 32px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(24, 25, 19, 0.97), rgba(14, 15, 12, 0.97)); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+      .capability:nth-child(even), .capability:nth-child(n + 3) { border-color: var(--line); }
+      .capability::before { content: ""; position: absolute; top: -74px; right: -58px; width: 205px; height: 205px; border: 1px solid rgba(240, 211, 38, 0.2); border-radius: 50%; box-shadow: inset 0 0 0 24px rgba(240, 211, 38, 0.02), 0 0 0 30px rgba(240, 211, 38, 0.018); }
+      .capability::after { content: ""; position: absolute; top: 0; right: 0; width: 46%; height: 54%; opacity: 0.36; background: radial-gradient(circle, rgba(240, 211, 38, 0.6) 0 1px, transparent 1.5px); background-size: 18px 18px; mask-image: linear-gradient(135deg, #000, transparent 78%); }
+      .capability:nth-child(even)::before { transform: rotate(24deg); }
+      .capability:hover { transform: translateY(-3px); border-color: rgba(240, 211, 38, 0.42); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18); }
+      .capability > * { position: relative; z-index: 1; }
+      .capability-number { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--yellow-line); color: var(--yellow); font: 850 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .capability h3 { max-width: 380px; margin: 44px 0 20px; font-size: 20px; line-height: 1.15; text-transform: uppercase; }
       .skill-list { display: flex; flex-wrap: wrap; gap: 8px; }
-      .skill-list span { padding: 6px 8px; background: rgba(240, 211, 38, 0.07); color: #cfcebf; font-size: 12px; }
+      .skill-list span { padding: 7px 9px; border: 1px solid rgba(240, 211, 38, 0.1); background: rgba(240, 211, 38, 0.055); color: #d4d2c3; font-size: 12px; transition: border-color 160ms ease, background 160ms ease, color 160ms ease; }
+      .skill-list span:hover { border-color: rgba(240, 211, 38, 0.34); background: rgba(240, 211, 38, 0.1); color: var(--paper); }
 
       .timeline { border-top: 1px solid var(--line); }
       .timeline-item { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 42px; padding: 34px 0; border-bottom: 1px solid var(--line); }
@@ -236,7 +266,7 @@ const page = `<!doctype html>
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
-        .intro-bird, .intro.ready .enter-control:not(.dragging) .enter-knob, .intro.ready .intro-status::before { animation: none !important; }
+        .intro-bird, .bird-pulse, .intro.ready .enter-control:not(.dragging) .enter-knob, .intro.ready .intro-status::before { animation: none !important; }
         .motion .reveal { opacity: 1; transform: none; }
       }
 
@@ -245,7 +275,8 @@ const page = `<!doctype html>
         .hero-grid { grid-template-columns: 1fr; padding: 72px 0 88px; }
         .portrait { justify-self: start; width: min(78vw, 470px); }
         .section-head, .about-grid { grid-template-columns: 1fr; }
-        .section-head { gap: 25px; }
+        .section-head { align-items: start; gap: 25px; }
+        .section-title { max-width: 680px; }
       }
 
       @media (max-width: 720px) {
@@ -253,6 +284,7 @@ const page = `<!doctype html>
         .intro-meta { top: 20px; left: 20px; max-width: 200px; }
         .intro-skip { top: 20px; right: 20px; }
         .intro-side { width: 29vw; min-width: 108px; opacity: 0.75; }
+        .bird-frame { right: -43%; width: 186%; }
         .intro-bird { right: -12px; width: clamp(128px, 35vw, 195px); }
         .intro-center { width: min(calc(100% - 36px), 450px); margin-right: 8vw; }
         .intro-mark { width: 64px; height: 64px; margin-bottom: 18px; }
@@ -272,8 +304,11 @@ const page = `<!doctype html>
         .portrait { width: min(88vw, 455px); margin-left: 6px; }
         .section { padding: 78px 0; }
         .projects, .capabilities, .contact-grid { grid-template-columns: 1fr; }
-        .capability:nth-child(even) { border-left: 0; }
-        .capability + .capability { border-top: 1px solid var(--line); }
+        .project { min-height: 380px; }
+        .project h3 { margin-top: 44px; }
+        .capability:nth-child(even), .capability + .capability { border: 1px solid var(--line); }
+        .systems-section::after { right: -44px; opacity: 0.7; }
+        .toolkit-section::before { left: -310px; width: 720px; }
         .other-project { grid-template-columns: 66px 1fr; padding: 15px 18px; }
         .other-project small { display: none; }
         .timeline-item { grid-template-columns: 1fr; gap: 12px; }
@@ -298,10 +333,11 @@ const page = `<!doctype html>
       <div class="intro-meta"><strong>FJMT / PORTFOLIO</strong>Signal 01 / North Tapanuli</div>
       <button class="intro-skip" id="skip-intro" type="button">Skip intro</button>
       <div class="intro-side" aria-hidden="true">
-        <div class="intro-bird"><img src="/fjmt-bird-logo.png" alt=""></div>
+        <div class="bird-frame"><span class="bird-axis"></span><span class="bird-pulse"></span></div>
+        <div class="intro-bird"><img src="/fjmt-bird-left.png" alt=""></div>
       </div>
       <div class="intro-center">
-        <div class="intro-mark" aria-hidden="true"><img src="/fjmt-bird-logo.png" alt=""></div>
+        <div class="intro-mark" aria-hidden="true"><img src="/fjmt-bird-left.png" alt=""></div>
         <p class="intro-kicker">Engineering the signal</p>
         <h1 class="intro-title">FJMT<span>Portfolio / 2026</span></h1>
         <p class="intro-copy">Electrical engineering / control systems / technology / programming</p>
@@ -318,7 +354,7 @@ const page = `<!doctype html>
     <header>
       <div class="shell nav">
         <a class="brand" href="#top" aria-label="Femiel Jubil M. Tambunan, home">
-          <span class="brand-image" aria-hidden="true"><img src="/fjmt-bird-logo.png" alt=""></span>
+          <span class="brand-image" aria-hidden="true"><img src="/fjmt-bird-left.png" alt=""></span>
           <span><strong>FJMT</strong><small>Engineering portfolio</small></span>
         </a>
         <nav aria-label="Primary navigation">
@@ -376,7 +412,7 @@ const page = `<!doctype html>
         </div>
       </section>
 
-      <section class="section" id="projects" data-section>
+      <section class="section systems-section" id="projects" data-section>
         <div class="shell">
           <div class="section-head reveal">
             <div><div class="kicker">02 / Projects</div><h2 class="section-title">Selected systems.</h2></div>
@@ -396,7 +432,7 @@ const page = `<!doctype html>
         </div>
       </section>
 
-      <section class="section" id="skills" data-section>
+      <section class="section toolkit-section" id="skills" data-section>
         <div class="shell">
           <div class="section-head reveal">
             <div><div class="kicker">03 / Skills</div><h2 class="section-title">Engineering toolkit.</h2></div>
@@ -774,7 +810,7 @@ export default {
       return new Response(profileBytes, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=604800, immutable", "x-content-type-options": "nosniff" } });
     }
 
-    if (url.pathname === "/fjmt-bird-logo.png") {
+    if (url.pathname === "/fjmt-bird-left.png") {
       logoBytes ??= decodeBase64(logoBase64);
       return new Response(logoBytes, { headers: { "content-type": "image/png", "cache-control": "public, max-age=604800, immutable", "x-content-type-options": "nosniff" } });
     }
